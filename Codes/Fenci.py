@@ -27,6 +27,11 @@ def fenci():
 	output_dict_path =  os.path.join(os.getcwd(), 'dict.txt')
 	# 使用用户自定义词典
 	jieba.load_userdict(output_dict_path)
+	# 去掉某些本不应该划分在一块的词
+	jieba.suggest_freq(('不', '宜'), True)
+	jieba.suggest_freq(('宜', '为'), True)
+	jieba.suggest_freq(('不', '应'), True)
+	jieba.suggest_freq(('不', '得'), True)
 
 	for file_name in os.listdir(os.path.join(os.path.abspath('..'), '规范')):
 		print(os.path.join(os.path.abspath('..'), '规范', file_name))
