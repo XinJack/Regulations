@@ -6,8 +6,13 @@
 		- 2.Dim：(导出属性，类型为IfcDemensionCount(integer，值为1或2或3))维度
 	+ IfcPointOnCurve(子类实体)  
 	代表位于曲线上的一个点  
-		- 1.BasicCurve: (类型为IfcCurve)
+		- 1.BasicCurve: (类型为IfcCurve) 点所在的曲线
 		- 2.PointParameter：(类型为IfcParameterValue(Real实数))点位置的参数值  
-		- 3.Dim： ()
-
+		- 3.Dim：维度  
+	+ IfcPointOnSurface(子类实体)  
+	代表位于参数化表面上的一个点  
+		- 1.BasicSurface: (类型为IfcSurface) 点所在的表面
+		- 2.PointParameterU: (类型为IfcParameterValue) 点位置的第一个参数
+		- 3.PointParameterV：(类型为IfcParameterValue) 点位置的第二个参数
+		- 4.Dim：维度
 
