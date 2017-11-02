@@ -9,3 +9,5 @@
 7. 其他分析：存放的是利用哈工大NLP工具对几条规范处理后的结果截图
 8. 规范到规则：规范审查的第二步
 9. IFCSchema整理：存放对IFCSchema资料的整理后的汇总文件
+10. Prolog资料整理：存放对Prolog资料的整理以及相关的代码文件
+	+ Codes: 存放由amzi prolog编写的prolog程序，值得注意的是，**文件的编码格式为ASCII**

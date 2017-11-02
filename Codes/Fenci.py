@@ -32,6 +32,7 @@ def fenci():
 	jieba.suggest_freq(('宜', '为'), True)
 	jieba.suggest_freq(('不', '应'), True)
 	jieba.suggest_freq(('不', '得'), True)
+	jieba.suggest_freq(('地面', '排水'), True)
 
 	for file_name in os.listdir(os.path.join(os.path.abspath('..'), '规范')):
 		print(os.path.join(os.path.abspath('..'), '规范', file_name))

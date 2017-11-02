@@ -1,4 +1,4 @@
-+ IfcPoint(实体)  
++ IfcPoint(抽象实体)  
 	抽象类型，表示1~3维笛卡尔坐标空间内的一个位置
 	+ IfcCartesianPoint(子类实体)  
 	代表笛卡尔空间坐标系中的一个点  
@@ -15,4 +15,12 @@
 		- 2.PointParameterU: (类型为IfcParameterValue) 点位置的第一个参数
 		- 3.PointParameterV：(类型为IfcParameterValue) 点位置的第二个参数
 		- 4.Dim：维度
++ IfcBoundedCurve(抽象实体)
+	抽象实体，表示带有确定端点的有限长度的曲线  
+	+ IfcCompositeCurve(子类实体)  
+	代表由一系列端对端连接的曲线组成的曲线
+
++ IfcRailing  
+代表栏杆
+
 
