@@ -1,7 +1,7 @@
 import os
 import jieba
 
-# 将[词典]目录下的多份词典整合为可被jieba分词使用的词典
+# 将[词库]目录下的多份词典整合为可被jieba分词使用的词典
 # 输出位置为当前文件夹下的dict.txt文件
 def generate_dict():
 	# 获取词典列表
@@ -32,7 +32,9 @@ def fenci():
 	jieba.suggest_freq(('宜', '为'), True)
 	jieba.suggest_freq(('不', '应'), True)
 	jieba.suggest_freq(('不', '得'), True)
-	jieba.suggest_freq(('地面', '排水'), True)
+	# jieba.suggest_freq(('楼梯', '踏步'), True)
+	# jieba.suggest_freq(('楼梯', '扶手'), True)
+
 
 	for file_name in os.listdir(os.path.join(os.path.abspath('..'), '规范')):
 		print(os.path.join(os.path.abspath('..'), '规范', file_name))
@@ -40,7 +42,7 @@ def fenci():
 		open(os.path.join(os.path.abspath('..'), 'outputs', file_name[0:-4] + '-处理后.txt'), 'w', encoding='utf-8') as writer:
 			for line in reader.readlines():
 				writer.write('[')
-				for word in jieba.cut(line):
+				for word in jieba.cut(line.strip()):
 					if word == '\n':
 						break
 					writer.write('[' + word + ']')
