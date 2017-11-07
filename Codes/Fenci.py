@@ -21,6 +21,16 @@ def generate_dict():
 			for line in reader.readlines():
 				writer.write(line)
 
+# 统计dict.txt中不重复的词汇
+def word_count():
+	dict_path = os.path.join(os.getcwd(), 'dict.txt')
+	word_set = set()
+	with open(dict_path, 'r', encoding='utf-8') as f:
+		for word in f.readlines():
+			print(word.strip())
+			word_set.add(word.strip())
+	return len(word_set)
+
 # 利用自定义词典对【规范】文件夹下的规范条文进行分词，输出结果到outputs文件夹下
 def fenci():
 	# 输出文件位置
@@ -55,3 +65,5 @@ if __name__ == '__main__':
 
 	fenci()
 
+	# 输出dict.txt文件中不重复的词汇数量
+	# print(word_count())
