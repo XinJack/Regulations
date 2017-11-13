@@ -1,11 +1,15 @@
 
+import os
+
 input_file = '待检查的规范-最终.txt'
 output_file = 'rules.pro'
 
 comparatorMap = {
 	'不低于': '>=',
 	'不高于': '=<',
+	'不多于': '=<',
 	'不小于': '>=',
+	'不少于': '>=',
 	'不大于': '=<',
 	'低于': '<',
 	'高于': '>',
@@ -72,37 +76,48 @@ def list2rule(original_code, codelist):
 	if object1 != 'null' and subject != 'null':
 		for key in [object1, subject]:
 			variable_dict.setdefault(key, variables.pop())
-		for item in ['{0}({1})'.format(object1, variable_dict[object1]), 
-			'{0}({1})'.format(subject, variable_dict[subject]), 
-			'组成成分({0}, {1})'.format(variable_dict[object1], variable_dict[subject])]:
+		for item in ['\'{0}\'({1})'.format(object1, variable_dict[object1]), 
+			'\'{0}\'({1})'.format(subject, variable_dict[subject]), 
+			#'\'属于\'({0}, {1})'.format(variable_dict[subject], variable_dict[object1])]: # 这里有点问题，object1和subject的关系可能有多种
+			'\'属于\'({0}, \'{1}\')'.format(variable_dict[subject], object1)]:
 			if item not in sublist:
 				sublist.append(item)
-		# result += '{0}({2}), {1}({3}), 组成成分({2}, {3}), '.format(object1, subject, variable_dict[object1], variable_dict[subject])
 	if subject != 'null' and action != 'null' and object2 != 'null':
 		for key in [subject, object2]:
 			variable_dict.setdefault(key, variables.pop())
-		for item in ['{0}({1})'.format(subject, variable_dict[subject]),
-			'{1}({1})'.format(object2, variable_dict[object2]),
-			'{0}({1}, {2})'.format(action, variable_dict[subject], variable_dict[object2])]:
+		for item in ['\'{0}\'({1})'.format(subject, variable_dict[subject]),
+			'\'{1}\'({1})'.format(object2, variable_dict[object2]),
+			'\'{0}\'({1}, {2})'.format(action, variable_dict[subject], variable_dict[object2])]:
 			if item not in sublist:
 				sublist.append(item)
-		# result += '{1}({3}), {2}({4}), {0}({3}, {4}), '.format(action, subject, object2, variable_dict[subject], variable_dict[object2])
 	for key in [object3, attribute, 'guid']:
 		variable_dict.setdefault(key, variables.pop())
-	for item in ['{0}({1})'.format(object3, variable_dict[object3]),
-		'guid({0}, {1})'.format(variable_dict[object3], variable_dict['guid']),
-		'{0}({1}, {2})'.format(attribute, variable_dict[object3], variable_dict[attribute]),
+	for item in ['\'{0}\'({1})'.format(object3, variable_dict[object3]),
+		'\'GUID\'({0}, {1})'.format(variable_dict[object3], variable_dict['guid']),
+		'\'{0}\'({1}, {2})'.format(attribute, variable_dict[object3], variable_dict[attribute]),
 		'not({0} {1} {2})'.format(variable_dict[attribute], comparatorMap.get(comparator), value),
 		'tab(4)', 'write("{0}(")'.format(object3), 'write({0})'.format(variable_dict['guid']), 'write(")不通过")', 'nl', 'fail']:
 		if item not in sublist:
 			sublist.append(item)
-	# result += '{0}({2}), guid({2}, {6}), {1}({2}, {3}), not({3} {4} {5}), tab(4), write("不通过"), nl, fail.'.format(object3,
-	 # attribute, variable_dict[object3], variable_dict[attribute], comparatorMap.get(comparator), value, variable_dict['guid'])
 	result += ', '.join(sublist)
 	result += '.'
 	return result
 
-with open(input_file, 'r', encoding='utf-8') as f:
+
+with open(input_file, 'r', encoding='utf-8') as f, open(output_file, 'w', encoding='utf-8') as f2:
+	# 输入知识
+	f2.write("'住宅'(X) :- 'IFC类型'(X, 'IfcBuilding'), '建筑物功能'(X, '住宅').\n")
+	f2.write("'新区'(X) :- 'IFC类型'(X, 'IfcBuilding'), '场地用途'(X, '新区').\n")
+	f2.write("'卧室'(X) :- 'IFC类型'(X, 'IfcSpace'), '房间功能'(X, '卧室').\n")
+	f2.write("'走廊'(X) :- 'IFC类型'(X, 'IfcSpace'), '房间功能'(X, '走廊').\n")
+	f2.write("'起居室'(X) :- 'IFC类型'(X, 'IfcSpace'), '房间功能'(X, '起居室').\n")
+	f2.write("'厨房'(X) :- 'IFC类型'(X, 'IfcSpace'), '房间功能'(X, '厨房').\n")
+	f2.write("'卫生间'(X) :- 'IFC类型'(X, 'IfcSpace'), '房间功能'(X, '卫生间').\n")
+	f2.write("'楼梯'(X) :- 'IFC类型'(X, 'IfcStair').\n")
+	f2.write("'阳台栏杆'(X) :- 'IFC类型'(X, 'IfcRailing'), '栏杆功能'(X, '阳台栏杆').\n")
+	f2.write("'防护栏杆'(X) :- 'IFC类型'(X, 'IfcRailing'), '栏杆功能'(X, '防护栏杆').\n")
+	f2.write("'排气道'(X) :- 'IFC类型'(X, 'IfcFlowSegment'), '管道类型'(X, '排气道').\n")
+
 	original_code = None # 规范条文
 	code = None # 结构体列表
 	while True:
@@ -115,3 +130,5 @@ with open(input_file, 'r', encoding='utf-8') as f:
 		print(code)
 		print(list2rule(original_code, code))
 		print('\n')
+		f2.write(list2rule(original_code, code))
+		f2.write('\n')
