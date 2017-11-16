@@ -71,7 +71,7 @@ def list2rule(original_code, codelist):
 	[object1, subject, action, object2, object3, attribute, comparator, value, unit] = codelist # 规范主体的各部分
 	variables = [item for item in reversed('ABCDEFGHIJKLMNOPQRSTUVWXYZ')] # 变量列表[A - Z]
 	variable_dict = dict() # 名称与变量的对应表
-	result = 'check :- write("正在检查条文：{0}"), nl, '.format(original_code)
+	result = "check :- write('正在检查条文：{0}'), nl, ".format(original_code)
 	sublist = list() # 存放子句的列表，目的是为了剔除重复地子句
 	if object1 != 'null' and subject != 'null':
 		for key in [object1, subject]:
@@ -92,11 +92,18 @@ def list2rule(original_code, codelist):
 				sublist.append(item)
 	for key in [object3, attribute, 'guid']:
 		variable_dict.setdefault(key, variables.pop())
+	# for item in ['\'{0}\'({1})'.format(object3, variable_dict[object3]),
+	# 	'\'GUID\'({0}, {1})'.format(variable_dict[object3], variable_dict['guid']),
+	# 	'\'{0}\'({1}, {2})'.format(attribute, variable_dict[object3], variable_dict[attribute]),
+	# 	'not({0} {1} {2})'.format(variable_dict[attribute], comparatorMap.get(comparator), value),
+	# 	'tab(4)', 'write("{0}(")'.format(object3), 'write({0})'.format(variable_dict['guid']), 'write(")不通过")', 'nl', 'fail']:
+	# 	if item not in sublist:
+	# 		sublist.append(item)
 	for item in ['\'{0}\'({1})'.format(object3, variable_dict[object3]),
-		'\'GUID\'({0}, {1})'.format(variable_dict[object3], variable_dict['guid']),
 		'\'{0}\'({1}, {2})'.format(attribute, variable_dict[object3], variable_dict[attribute]),
 		'not({0} {1} {2})'.format(variable_dict[attribute], comparatorMap.get(comparator), value),
-		'tab(4)', 'write("{0}(")'.format(object3), 'write({0})'.format(variable_dict['guid']), 'write(")不通过")', 'nl', 'fail']:
+		'tab(4)', "write('{0}(')".format(object3), 'write({0})'.format(variable_dict[object3]), "write(')的')", 
+		"write('{0}为')".format(attribute), 'write({0})'.format(variable_dict[attribute]), "write('，不符合规范要求。不通过')", 'nl', 'fail']:
 		if item not in sublist:
 			sublist.append(item)
 	result += ', '.join(sublist)
